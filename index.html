@@ -292,7 +292,7 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
 .note-demo { margin-top: 18px; font-size: 13px; color: var(--smoke); }
 
 /* Catálogo con polvo dorado: partículas de fondo, tarjetas 3D y transición que se deshace en polvo */
-#catalogo { position: relative; overflow: hidden;
+#catalogo { position: relative; overflow: clip;
   background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(210,163,92,.08), transparent 70%), var(--ink); }
 #cat-fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 #catalogo .wrap { position: relative; z-index: 1; }
@@ -341,9 +341,10 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
 
 /* Catálogo WebGL: tarjetas de vidrio flotando alrededor de una columna de partículas */
 #catalogo.has-3d #grid, #catalogo.has-3d #ring-ctl { display: none !important; }
-.c3d { position: relative; width: 100vw; margin-left: calc(50% - 50vw); height: clamp(560px, 82vh, 780px); margin-top: 4px; }
-.c3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
-.c3d canvas.dragging { cursor: grabbing; }
+/* Pasillo vertical: la sección es alta y la escena queda fija mientras bajas por las tarjetas */
+.c3d { position: relative; width: 100vw; margin-left: calc(50% - 50vw); --n: 6; height: calc(var(--n) * 48svh + 100svh); margin-top: 4px; }
+.c3d-sticky { position: sticky; top: 72px; height: calc(100svh - 72px); overflow: hidden; }
+.c3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; touch-action: pan-y; }
 .c3d-hint { position: absolute; top: 6px; left: 50%; transform: translateX(-50%); margin: 0; font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--smoke); pointer-events: none; white-space: nowrap; }
 .c3d-info {
   position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
@@ -356,6 +357,13 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
 .c3d-info p { margin: 0; color: var(--smoke); font-size: 14px; }
 .c3d-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
 .c3d-price { font-family: var(--display); font-size: 30px; color: var(--amber); font-variant-numeric: tabular-nums; }
+/* En computadora el panel va al lado opuesto de la tarjeta activa */
+@media (min-width: 900px) {
+  .c3d-info { width: min(400px, 34vw); bottom: auto; top: 50%; transform: translateY(-50%); align-items: flex-start; text-align: left; padding: 24px 26px; gap: 10px; transition: left .5s ease, right .5s ease; }
+  .c3d-info[data-side="1"] { left: 5vw; right: auto; }
+  .c3d-info[data-side="-1"] { right: 5vw; left: auto; }
+  .c3d-info .c3d-row { justify-content: flex-start; }
+}
 .c3d-info.swap > * { opacity: 0; transform: translateY(6px); }
 .c3d-info > * { transition: opacity .25s ease, transform .25s ease; }
 
@@ -545,8 +553,9 @@ footer .social a:hover { color: var(--paper); }
         <button class="chip" id="f-unisex" data-f="unisex" aria-pressed="false">Unisex</button>
       </div>
       <div class="c3d" id="c3d" hidden>
+       <div class="c3d-sticky" id="c3d-sticky">
         <canvas id="c3d-canvas" aria-hidden="true"></canvas>
-        <p class="c3d-hint">Arrastra o haz scroll para girar</p>
+        <p class="c3d-hint">Baja para recorrer los aromas</p>
         <div class="c3d-info" id="c3d-info" aria-live="polite">
           <span class="c3d-meta" id="c3d-meta"></span>
           <h3 id="c3d-name"></h3>
@@ -558,6 +567,7 @@ footer .social a:hover { color: var(--paper); }
             <button class="sl-arrow" id="c3d-next" aria-label="Perfume siguiente">&#8594;</button>
           </div>
         </div>
+       </div>
       </div>
       <div class="grid" id="grid"></div>
       <div class="ring-ctl" id="ring-ctl" hidden>
@@ -910,14 +920,14 @@ const Cat3D = (function () {
   pg.setAttribute("aColor", new THREE.BufferAttribute(cols, 3));
   const pMat = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    uniforms: { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() }, uSpin: { value: 0 } },
+    uniforms: { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() }, uSpin: { value: 0 }, uRise: { value: 0 } },
     vertexShader: `
-      uniform float uTime; uniform float uPR; uniform float uSpin;
+      uniform float uTime; uniform float uPR; uniform float uSpin; uniform float uRise;
       attribute vec3 aSeed; attribute vec3 aColor; varying vec3 vColor; varying float vA;
       void main(){
         float dir = aSeed.y > .5 ? 1. : -1.;
         float th = aSeed.x + uTime * (.12 + aSeed.z * .3) * dir + uSpin;
-        float y = mod(aSeed.y * 9. + uTime * .22 * (.3 + aSeed.z), 9.) - 4.5;
+        float y = mod(aSeed.y * 9. + uTime * .22 * (.3 + aSeed.z) + uRise, 9.) - 4.5;
         float r = .08 + pow(aSeed.z, 2.2) * 1.25 + sin(y * 2.3 + uTime + aSeed.x) * .06;
         vec3 p = vec3(cos(th) * r, y, sin(th) * r);
         vec4 mv = modelViewMatrix * vec4(p, 1.);
@@ -1026,43 +1036,62 @@ const Cat3D = (function () {
     return m;
   }
 
-  // ---- Estado del carrusel ----
-  let cards = [], list = [], R = 3, rot = 0, drag = 0, vel = 0, dragging = false, moved = 0, lastX = 0, lastInput = 0, frontI = -1, running = false, raf = 0;
+  // ---- Estado del pasillo vertical ----
+  // Las tarjetas se alternan a izquierda y derecha de la columna, abiertas en ángulo como páginas,
+  // y al bajar por la página suben: viajas hacia arriba entre ellas.
+  const stick = document.getElementById("c3d-sticky");
+  const HDR = 72;
+  let cards = [], list = [], cur = 0, frontI = -1, running = false, raf = 0, moved = 0;
   let dissolveTarget = 0, pending = null, mouse = { x: 0, y: 0 };
-  const step = () => Math.PI * 2 / Math.max(list.length, 1);
+  let GAP = 2.7, SPREAD = 2.6, narrow = false;
 
   function build(items) {
     cards.forEach(c => { ring.remove(c); c.material.uniforms.uTex.value.dispose(); c.material.dispose(); });
     list = items; cards = items.map(makeCard); cards.forEach(c => ring.add(c));
-    R = list.length <= 1 ? 0 : Math.max(2.4, list.length * .62);
-    drag = 0; rot = scrollAngle(); frontI = -1; layout();
+    wrap.style.setProperty("--n", Math.max(list.length - 1, 1));
+    frontI = -1; cur = progressIndex(); layout();
   }
   function setFilter(f) {
     const items = PRODUCTOS.filter(p => f === "todos" || p.cat === f);
     dissolveTarget = 1; pending = items;
   }
 
-  function scrollAngle() {
-    const r = sec.getBoundingClientRect(), vh = window.innerHeight;
-    const pr = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
-    return -(pr - .5) * Math.PI * 1.3;
+  // Qué tan abajo vas dentro del pasillo, convertido a "número de tarjeta" (0 = primera)
+  function trackInfo() {
+    const r = wrap.getBoundingClientRect();
+    const total = Math.max(1, r.height - (window.innerHeight - HDR));
+    return { r, total };
+  }
+  function progressIndex() {
+    const { r, total } = trackInfo();
+    const p = Math.min(1, Math.max(0, (HDR - r.top) / total));
+    return p * Math.max(list.length - 1, 0);
+  }
+  function scrollToIndex(i) {
+    const { r, total } = trackInfo();
+    const p = list.length > 1 ? i / (list.length - 1) : 0;
+    window.scrollTo({ top: window.scrollY + r.top - HDR + p * total, behavior: "smooth" });
   }
 
   function layout() {
-    const w = wrap.clientWidth, h = wrap.clientHeight;
+    const w = stick.clientWidth, h = stick.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    const narrow = camera.aspect < .9;
-    camera.fov = narrow ? 50 : 36;
-    camera.position.set(0, .3, R + (narrow ? 8.6 : 8.2));
-    camera.lookAt(0, -1.05, 0);
+    narrow = camera.aspect < .9;
+    camera.fov = narrow ? 52 : 40;
+    camera.position.set(0, 0, narrow ? 9.2 : 7.6);
+    camera.lookAt(0, narrow ? -2.1 : -.55, 0);
     camera.updateProjectionMatrix();
+    const halfW = Math.tan(camera.fov * Math.PI / 360) * camera.position.z * camera.aspect;
+    SPREAD = narrow ? Math.min(1.1, halfW * .45) : Math.min(3.4, halfW * .52);
+    GAP = narrow ? 3.4 : 2.7;
   }
 
   const $ = id => document.getElementById(id);
   const info = $("c3d-info");
   function showInfo(i) {
     const p = list[i]; if (!p) return;
+    info.dataset.side = i % 2 ? 1 : -1;
     info.classList.add("swap");
     setTimeout(() => {
       $("c3d-meta").textContent = `${catNombre[p.cat]} · ${p.tipo} · ${p.ml} ml`;
@@ -1078,18 +1107,10 @@ const Cat3D = (function () {
   function frame() {
     const t = clock.getElapsedTime();
     pMat.uniforms.uTime.value = t;
-    // Giro: scroll + arrastre, con imán que deja una tarjeta al frente
-    if (!dragging) {
-      drag += vel; vel *= .92;
-      if (performance.now() - lastInput > 700 && list.length > 1) {
-        const raw = scrollAngle() + drag, s = step();
-        drag += (Math.round(raw / s) * s - raw) * .06;
-      }
-    }
-    const target = scrollAngle() + drag;
-    const prevRot = rot;
-    rot += (target - rot) * .1;
-    pMat.uniforms.uSpin.value = rot * .6;
+    // Avance por el pasillo según el scroll (suavizado)
+    cur += (progressIndex() - cur) * .09;
+    pMat.uniforms.uSpin.value = cur * 1.4;
+    pMat.uniforms.uRise.value = -cur * 1.6;
     // Disolución al cambiar de filtro
     cards.forEach(c => {
       const u = c.material.uniforms.uDissolve;
@@ -1099,17 +1120,25 @@ const Cat3D = (function () {
     });
     if (pending && cards.every(c => c.material.uniforms.uDissolve.value > .97)) { build(pending); pending = null; dissolveTarget = 0; cards.forEach(c => c.material.uniforms.uDissolve.value = 1); }
     else if (pending && !cards.length) { build(pending); pending = null; dissolveTarget = 0; }
-    // Posición de cada tarjeta en la órbita
-    let best = -2, bi = 0;
+    // Posición de cada tarjeta en el pasillo: alternan lado, suben al bajar, la actual se acerca
+    let bi = 0, best = 1e9;
     cards.forEach((c, i) => {
-      const a = i * step() + rot;
-      const cos = Math.cos(a);
-      c.position.set(Math.sin(a) * R, Math.sin(t * .7 + i * 1.7) * .07, cos * R);
-      c.rotation.y = a + Math.sin(a) * .25;
-      c.rotation.z = Math.sin(t * .5 + i) * .012;
-      c.material.uniforms.uFocus.value = Math.max(0, Math.min(1, (cos - .3) / .55));
-      c.renderOrder = Math.round(cos * 100) + 100;
-      if (cos > best) { best = cos; bi = i; }
+      const d = i - cur;                       // <0 ya pasó (arriba), >0 viene (abajo)
+      const ad = Math.abs(d), near = Math.min(1, ad);
+      const side = i % 2 ? 1 : -1;
+      const x = side * SPREAD * ((narrow ? .2 : .5) + (narrow ? .8 : .5) * near) + Math.sin(t * .4 + i) * .04;
+      const y = -d * GAP + Math.sin(t * .7 + i * 1.7) * .06;
+      const z = 1.1 - ad * 1.6;
+      c.position.set(x, y, z);
+      c.rotation.y = -side * (.28 + .5 * near);
+      c.rotation.x = Math.max(-.5, Math.min(.5, d * .18));
+      c.rotation.z = side * d * .04 + Math.sin(t * .5 + i) * .01;
+      const s = .82 + .18 * (1 - near);
+      c.scale.set(s, s, s);
+      c.material.uniforms.uFocus.value = Math.max(0, 1 - Math.max(0, ad - .3) * 2.2);
+      c.visible = ad < 3.2;
+      c.renderOrder = Math.round(z * 100) + 1000;
+      if (ad < best) { best = ad; bi = i; }
     });
     if (bi !== frontI && !pending) { frontI = bi; showInfo(bi); }
     // La cámara se mueve un poco con el mouse
@@ -1121,17 +1150,15 @@ const Cat3D = (function () {
 
   // Arrastre y clic
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-  cv.addEventListener("pointerdown", e => { dragging = true; moved = 0; lastX = e.clientX; vel = 0; cv.classList.add("dragging"); cv.setPointerCapture(e.pointerId); lastInput = performance.now(); });
+  let downX = 0, downY = 0;
+  cv.addEventListener("pointerdown", e => { downX = e.clientX; downY = e.clientY; });
   cv.addEventListener("pointermove", e => {
     const r = cv.getBoundingClientRect();
     mouse.x = (e.clientX - r.left) / r.width * 2 - 1; mouse.y = (e.clientY - r.top) / r.height * 2 - 1;
-    if (!dragging) return;
-    const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx);
-    drag += dx * .006; vel = dx * .006; lastInput = performance.now();
   });
   cv.addEventListener("pointerup", e => {
-    dragging = false; cv.classList.remove("dragging"); lastInput = performance.now();
-    if (moved > 6) return;
+    moved = Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY);
+    if (moved > 8) return;
     const r = cv.getBoundingClientRect();
     ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height * 2 - 1));
     ray.setFromCamera(ndc, camera);
@@ -1139,13 +1166,12 @@ const Cat3D = (function () {
     if (hit) {
       const i = cards.indexOf(hit.object);
       if (i === frontI) { $("c3d-cta").focus(); $("c3d-cta").animate([{ transform: "scale(1)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], 400); }
-      else { const s = step(); let d = -(i * s + rot); d = Math.atan2(Math.sin(d), Math.cos(d)); drag += d; }
+      else scrollToIndex(i);
     }
   });
-  cv.addEventListener("pointercancel", () => { dragging = false; cv.classList.remove("dragging"); });
   cv.addEventListener("pointerleave", () => { mouse.x = 0; mouse.y = 0; });
-  $("c3d-prev").addEventListener("click", () => { drag += step(); lastInput = performance.now() - 800; });
-  $("c3d-next").addEventListener("click", () => { drag -= step(); lastInput = performance.now() - 800; });
+  $("c3d-prev").addEventListener("click", () => scrollToIndex(Math.max(0, frontI - 1)));
+  $("c3d-next").addEventListener("click", () => scrollToIndex(Math.min(list.length - 1, frontI + 1)));
   window.addEventListener("resize", layout);
 
   new IntersectionObserver(en => {
