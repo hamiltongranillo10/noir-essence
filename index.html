@@ -495,6 +495,39 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
   .fl-step, .fl-tag { opacity: 1; } .fl-step { display: block; }
 }
 
+/* Cinta de confianza en movimiento */
+.marquee { overflow: hidden; background: linear-gradient(90deg, var(--wine-deep), var(--wine) 50%, var(--wine-deep)); border-block: 1px solid rgba(210,163,92,.3); padding-block: 22px; }
+.mq-track { display: flex; width: max-content; will-change: transform; }
+.mq-group { display: flex; align-items: center; flex: none; }
+.mq-group span { font-family: var(--display); font-size: clamp(26px, 3.4vw, 44px); white-space: nowrap; padding-inline: clamp(18px, 2.4vw, 36px); letter-spacing: .02em; }
+.mq-group em { font-style: normal; color: var(--amber); }
+.mq-group i { font-style: normal; color: var(--amber); font-size: 18px; text-shadow: 0 0 14px rgba(210,163,92,.8); }
+@media (prefers-reduced-motion: reduce) { .mq-track { flex-wrap: wrap; width: auto; justify-content: center; } .mq-group + .mq-group { display: none; } }
+
+/* Sección final: la frase se ilumina con un foco dorado que sigue al mouse */
+.final .wrap.fn-wrap { display: flex; flex-direction: column; flex-wrap: nowrap; align-items: stretch; justify-content: flex-start; gap: 26px; padding-block: clamp(72px, 11vw, 150px); }
+.fn-text { position: relative; }
+.final .fn-text h2 { font-size: clamp(52px, 9vw, 140px); line-height: .98; max-width: 12ch; letter-spacing: .005em; }
+.fn-base { color: rgba(241,235,228,.16); }
+.fn-lit {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, #fff3d6, var(--amber) 45%, #f1ebe4); -webkit-background-clip: text; background-clip: text; color: transparent;
+  --x: 30%; --y: 50%;
+  -webkit-mask-image: radial-gradient(circle 220px at var(--x) var(--y), #000 0%, rgba(0,0,0,.6) 45%, transparent 75%);
+          mask-image: radial-gradient(circle 220px at var(--x) var(--y), #000 0%, rgba(0,0,0,.6) 45%, transparent 75%);
+}
+.fn-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px; }
+.fn-sub { margin: 0; color: var(--smoke); max-width: 40ch; font-size: 16px; }
+.fn-orb { position: relative; width: 170px; height: 170px; flex: none; display: grid; place-items: center; text-decoration: none; color: var(--paper); }
+.fn-ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 16s linear infinite; }
+.fn-ring text { fill: var(--paper); font-family: "Tenor Sans", sans-serif; font-size: 13.2px; letter-spacing: 3.4px; }
+.fn-core { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; background: var(--amber); color: var(--ink); box-shadow: 0 0 0 1px rgba(210,163,92,.5), 0 0 50px -6px rgba(210,163,92,.7); transition: transform .35s cubic-bezier(.2,.7,.2,1), background .3s; }
+.fn-core svg { width: 34px; height: 34px; }
+.fn-orb:hover .fn-core { transform: scale(1.1); background: #e8c27e; }
+.fn-orb:hover .fn-ring { animation-duration: 5s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .fn-ring { animation: none; } .fn-lit { -webkit-mask-image: none; mask-image: none; } .fn-base { visibility: hidden; } }
+
 /* FAQ editorial: título + tarjeta de conserje a la izquierda, acordeón numerado a la derecha */
 .faq-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
 .faq-side { position: sticky; top: 110px; display: flex; flex-direction: column; gap: 16px; }
@@ -687,12 +720,20 @@ footer .social a:hover { color: var(--paper); }
     </div>
   </section>
 
-  <div class="strip">
-    <div class="wrap">
-      <div><strong>Contra entrega</strong><span>Pagas al recibir</span></div>
-      <div><strong>24–72 h</strong><span>Entrega según tu ciudad</span></div>
-      <div><strong>8–10 h</strong><span>Duración en piel (EDP)</span></div>
-      <div><strong>Asesoría</strong><span>Te ayudamos a elegir</span></div>
+  <div class="marquee" id="marquee" aria-label="Pago contra entrega · Envío a todo Ecuador en 24 a 72 horas · Dura 8 a 10 horas en piel · Asesoría personal">
+    <div class="mq-track" id="mq-track" aria-hidden="true">
+      <div class="mq-group">
+        <span>Pago contra entrega</span><i>✦</i>
+        <span>Envío a todo Ecuador <em>24–72 h</em></span><i>✦</i>
+        <span>Dura <em>8–10 h</em> en piel</span><i>✦</i>
+        <span>Asesoría personal</span><i>✦</i>
+      </div>
+      <div class="mq-group">
+        <span>Pago contra entrega</span><i>✦</i>
+        <span>Envío a todo Ecuador <em>24–72 h</em></span><i>✦</i>
+        <span>Dura <em>8–10 h</em> en piel</span><i>✦</i>
+        <span>Asesoría personal</span><i>✦</i>
+      </div>
     </div>
   </div>
 
@@ -903,12 +944,23 @@ footer .social a:hover { color: var(--paper); }
     </div>
   </section>
 
-  <section class="final">
-    <div class="wrap">
-      <h2>Encuentra el aroma que <em>te define.</em></h2>
-      <a class="btn btn-wa" data-wa="Hola Noir Essence, ¿me ayudan a elegir un perfume?" href="#" target="_blank" rel="noopener">
-        <svg><use href="#wa"/></svg>Pedir asesoría por WhatsApp
-      </a>
+  <section class="final" id="final">
+    <div class="wrap fn-wrap">
+      <p class="eyebrow">Noir Essence · Ecuador</p>
+      <div class="fn-text">
+        <h2 class="fn-base">Encuentra el aroma que te define.</h2>
+        <h2 class="fn-lit" aria-hidden="true">Encuentra el aroma que te define.</h2>
+      </div>
+      <div class="fn-row">
+        <p class="fn-sub">Cuéntanos qué aromas te gustan y te recomendamos tu perfume ideal. Sin compromiso.</p>
+        <a class="fn-orb" data-wa="Hola Noir Essence, ¿me ayudan a elegir un perfume?" href="#" target="_blank" rel="noopener" aria-label="Pedir asesoría por WhatsApp">
+          <svg class="fn-ring" viewBox="0 0 200 200" aria-hidden="true">
+            <defs><path id="fn-circle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+            <text textLength="482" lengthAdjust="spacing"><textPath href="#fn-circle" textLength="482" lengthAdjust="spacing">PEDIR POR WHATSAPP ✦ ASESORÍA GRATIS ✦</textPath></text>
+          </svg>
+          <span class="fn-core"><svg><use href="#wa"/></svg></span>
+        </a>
+      </div>
     </div>
   </section>
 </main>
@@ -1888,6 +1940,37 @@ const Ring = (function () {
       if (willOpen) { it.classList.add("open"); it.querySelector(".acc-q").setAttribute("aria-expanded", "true"); }
     });
   });
+})();
+
+// ===== CINTA EN MOVIMIENTO: se acelera un poco cuando haces scroll =====
+(function () {
+  const track = document.getElementById("mq-track");
+  if (!track || window.matchMedia("(prefers-reduced-motion: reduce)").matches || !track.animate) return;
+  const anim = track.animate([{ transform: "translateX(0)" }, { transform: "translateX(-50%)" }], { duration: 38000, iterations: Infinity });
+  let lastY = window.scrollY, boost = 0;
+  window.addEventListener("scroll", () => { boost = Math.min(4, boost + Math.abs(window.scrollY - lastY) / 60); lastY = window.scrollY; }, { passive: true });
+  (function loop() { boost *= .92; anim.playbackRate = 1 + boost; requestAnimationFrame(loop); })();
+})();
+
+// ===== SECCIÓN FINAL: foco dorado que sigue al mouse (en celular se mueve solo) =====
+(function () {
+  const box = document.querySelector(".fn-text");
+  const lit = document.querySelector(".fn-lit");
+  if (!box || !lit || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let tx = 30, ty = 50, x = 30, y = 50, user = false, t0 = performance.now(), visible = false;
+  box.parentElement.parentElement.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
+    const r = box.getBoundingClientRect();
+    tx = (e.clientX - r.left) / r.width * 100; ty = (e.clientY - r.top) / r.height * 100; user = true;
+  });
+  box.parentElement.parentElement.addEventListener("pointerleave", () => { user = false; });
+  new IntersectionObserver(en => { visible = en[0].isIntersecting; if (visible) requestAnimationFrame(loop); }).observe(box);
+  function loop(now) {
+    if (!user) { const t = (now - t0) / 1000; tx = 50 + Math.sin(t * .6) * 42; ty = 50 + Math.sin(t * 1.1) * 30; }
+    x += (tx - x) * .12; y += (ty - y) * .12;
+    lit.style.setProperty("--x", x.toFixed(1) + "%"); lit.style.setProperty("--y", y.toFixed(1) + "%");
+    if (visible) requestAnimationFrame(loop);
+  }
 })();
 
 // ===== COOKIES Y PÍXEL DE META =====
