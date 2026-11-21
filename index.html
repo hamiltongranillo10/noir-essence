@@ -495,6 +495,56 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
   .fl-step, .fl-tag { opacity: 1; } .fl-step { display: block; }
 }
 
+/* FAQ editorial: título + tarjeta de conserje a la izquierda, acordeón numerado a la derecha */
+.faq-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+.faq-side { position: sticky; top: 110px; display: flex; flex-direction: column; gap: 16px; }
+.faq-side h2 { font-size: clamp(40px, 5.4vw, 72px); }
+.faq-lead { margin: 0; color: var(--smoke); max-width: 34ch; }
+.concierge {
+  margin-top: 14px; position: relative; overflow: hidden; display: grid; grid-template-columns: auto 1fr; gap: 14px 16px; align-items: start;
+  padding: 24px; border-radius: 20px; border: 1px solid rgba(210,163,92,.35);
+  background: radial-gradient(ellipse 90% 120% at 100% 0%, rgba(210,163,92,.16), transparent 55%), linear-gradient(150deg, var(--wine), var(--wine-deep));
+  box-shadow: 0 30px 60px -30px rgba(0,0,0,.8);
+}
+.cg-av { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--amber); font-family: var(--display); font-size: 26px; border: 1px solid rgba(210,163,92,.6); }
+.cg-k { font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: var(--amber); }
+.concierge h3 { font-size: 30px; margin: 4px 0 6px; }
+.concierge p { margin: 0; color: rgba(241,235,228,.78); font-size: 14px; }
+.concierge .btn { grid-column: 1 / -1; justify-self: start; }
+.btn-gold { background: var(--amber); color: var(--ink); border-color: var(--amber); }
+.btn-gold:hover { background: #e2b46a; }
+.cg-online { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: rgba(241,235,228,.7); }
+.cg-online i { width: 7px; height: 7px; border-radius: 50%; background: #4ad07f; box-shadow: 0 0 0 0 rgba(74,208,127,.6); animation: ping 2s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(74,208,127,.55); } 80%, 100% { box-shadow: 0 0 0 8px rgba(74,208,127,0); } }
+.acc { border-top: 1px solid rgba(241,235,228,.12); }
+.acc-item { position: relative; border-bottom: 1px solid rgba(241,235,228,.12); }
+.acc-item::before { content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 0; background: var(--amber); transition: width .6s cubic-bezier(.2,.7,.2,1); }
+.acc-item.open::before { width: 100%; }
+.acc-q { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: 56px 1fr 32px; align-items: center; gap: 12px; padding: 26px 0; }
+.acc-q:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; border-radius: 6px; }
+.acc-n { font-family: var(--display); font-size: 30px; color: rgba(241,235,228,.35); transition: color .3s; }
+.acc-t { font-family: var(--display); font-size: clamp(22px, 2.3vw, 30px); line-height: 1.2; transition: color .3s; }
+.acc-q:hover .acc-t, .acc-item.open .acc-t { color: var(--paper); }
+.acc-q:hover .acc-n, .acc-item.open .acc-n { color: var(--amber); }
+.acc-item:not(.open) .acc-t { color: rgba(241,235,228,.82); }
+.acc-i { position: relative; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(241,235,228,.22); transition: transform .4s ease, border-color .3s, background .3s; }
+.acc-i::before, .acc-i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 1px; background: var(--amber); transform: translate(-50%, -50%); }
+.acc-i::after { transform: translate(-50%, -50%) rotate(90deg); transition: transform .4s ease; }
+.acc-item.open .acc-i { transform: rotate(180deg); border-color: var(--amber); background: rgba(210,163,92,.12); }
+.acc-item.open .acc-i::after { transform: translate(-50%, -50%) rotate(0deg); }
+.acc-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.2,.7,.2,1); }
+.acc-item.open .acc-a { grid-template-rows: 1fr; }
+.acc-a > div { overflow: hidden; }
+.acc-a p { margin: 0; padding: 0 44px 28px 68px; color: var(--smoke); font-size: 15px; max-width: 60ch; opacity: 0; transform: translateY(-6px); transition: opacity .35s ease .05s, transform .35s ease .05s; }
+.acc-item.open .acc-a p { opacity: 1; transform: none; }
+@media (max-width: 860px) {
+  .faq-grid { grid-template-columns: 1fr; }
+  .faq-side { position: static; }
+  .acc-q { grid-template-columns: 40px 1fr 30px; padding: 20px 0; }
+  .acc-n { font-size: 24px; }
+  .acc-a p { padding: 0 0 22px 52px; font-size: 14px; }
+}
+
 /* FAQ */
 .faq { display: flex; flex-direction: column; border-top: 1px solid var(--ink-3); max-width: 820px; }
 details { border-bottom: 1px solid var(--ink-3); }
@@ -811,32 +861,44 @@ footer .social a:hover { color: var(--paper); }
   </section>
 
   <section class="block" id="preguntas" style="padding-top:0">
-    <div class="wrap">
-      <div class="head">
+    <div class="wrap faq-grid">
+      <aside class="faq-side">
         <p class="eyebrow">Preguntas frecuentes</p>
         <h2>Antes de pedir</h2>
-      </div>
-      <div class="faq">
-        <details>
-          <summary>¿Cómo funciona el pago contra entrega?</summary>
-          <p>Haces tu pedido por WhatsApp, lo enviamos con transportadora y pagas en efectivo al recibirlo. No necesitas tarjeta ni pagar por adelantado.</p>
-        </details>
-        <details>
-          <summary>¿A qué ciudades envían y cuánto tarda?</summary>
-          <p>Enviamos a todo Ecuador. En Quito y Guayaquil suele llegar en 24 a 48 horas; en el resto del país, de 48 a 72 horas según la ruta.</p>
-        </details>
-        <details>
-          <summary>¿Cuánto dura el aroma en la piel?</summary>
-          <p>Depende de la concentración y de tu tipo de piel. Un Eau de Parfum dura entre 8 y 10 horas. Aplícalo en cuello y muñecas, sin frotar, para que dure más.</p>
-        </details>
-        <details>
-          <summary>¿Me ayudan a elegir un perfume para regalar?</summary>
-          <p>Sí. Cuéntanos para quién es, su edad y qué estilo tiene, y te recomendamos dos o tres opciones con su precio.</p>
-        </details>
-        <details>
-          <summary>¿Puedo pagar por transferencia?</summary>
-          <p>Sí. Además del pago contra entrega aceptamos transferencia bancaria y link de pago con tarjeta.</p>
-        </details>
+        <p class="faq-lead">Todo lo que necesitas saber para comprar tranquilo, sin pagar nada por adelantado.</p>
+        <div class="concierge">
+          <span class="cg-av">N</span>
+          <div>
+            <span class="cg-k">Tu asesor de aromas</span>
+            <h3>¿Otra duda?</h3>
+            <p>Escríbenos y te respondemos por WhatsApp. También te ayudamos a elegir el perfume ideal.</p>
+          </div>
+          <a class="btn btn-gold" data-wa="Hola Noir Essence, tengo una pregunta" href="#" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>Escríbenos</a>
+          <span class="cg-online"><i></i>Atención por WhatsApp</span>
+        </div>
+      </aside>
+
+      <div class="acc" id="acc">
+        <div class="acc-item open">
+          <button class="acc-q" id="acc-q1" aria-expanded="true" aria-controls="acc-a1"><span class="acc-n">01</span><span class="acc-t">¿Cómo funciona el pago contra entrega?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a1" role="region" aria-labelledby="acc-q1"><div><p>Haces tu pedido por WhatsApp, lo enviamos con transportadora y pagas en efectivo al recibirlo. No necesitas tarjeta ni pagar por adelantado.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-q" id="acc-q2" aria-expanded="false" aria-controls="acc-a2"><span class="acc-n">02</span><span class="acc-t">¿A qué ciudades envían y cuánto tarda?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a2" role="region" aria-labelledby="acc-q2"><div><p>Enviamos a todo Ecuador. En Quito y Guayaquil suele llegar en 24 a 48 horas; en el resto del país, de 48 a 72 horas según la ruta.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-q" id="acc-q3" aria-expanded="false" aria-controls="acc-a3"><span class="acc-n">03</span><span class="acc-t">¿Cuánto dura el aroma en la piel?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a3" role="region" aria-labelledby="acc-q3"><div><p>Depende de la concentración y de tu tipo de piel. Un Eau de Parfum dura entre 8 y 10 horas. Aplícalo en cuello y muñecas, sin frotar, para que dure más.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-q" id="acc-q4" aria-expanded="false" aria-controls="acc-a4"><span class="acc-n">04</span><span class="acc-t">¿Me ayudan a elegir un perfume para regalar?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a4" role="region" aria-labelledby="acc-q4"><div><p>Sí. Cuéntanos para quién es, su edad y qué estilo tiene, y te recomendamos dos o tres opciones con su precio.</p></div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-q" id="acc-q5" aria-expanded="false" aria-controls="acc-a5"><span class="acc-n">05</span><span class="acc-t">¿Puedo pagar por transferencia?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a5" role="region" aria-labelledby="acc-q5"><div><p>Sí. Además del pago contra entrega aceptamos transferencia bancaria y link de pago con tarjeta.</p></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -1814,6 +1876,18 @@ const Ring = (function () {
   window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener("resize", update);
   update();
+})();
+
+// ===== FAQ: acordeón, una respuesta abierta a la vez =====
+(function () {
+  const items = [...document.querySelectorAll("#acc .acc-item")];
+  items.forEach(it => {
+    it.querySelector(".acc-q").addEventListener("click", () => {
+      const willOpen = !it.classList.contains("open");
+      items.forEach(o => { o.classList.remove("open"); o.querySelector(".acc-q").setAttribute("aria-expanded", "false"); });
+      if (willOpen) { it.classList.add("open"); it.querySelector(".acc-q").setAttribute("aria-expanded", "true"); }
+    });
+  });
 })();
 
 // ===== COOKIES Y PÍXEL DE META =====
