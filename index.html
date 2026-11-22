@@ -168,6 +168,14 @@ nav.links a:hover { color: var(--paper); }
 }
 .sl-bottle.out .sl-video { transform: translateY(40px) rotate(-4deg) scale(.9); opacity: 0; }
 .sl-bottle.in-from-right .sl-video { transform: translateX(60px) rotate(4deg) scale(.92); opacity: 0; transition: none; }
+@media (min-width: 901px) {
+  /* En computadora el video se funde con el fondo: sin marco, bordes que se desvanecen */
+  .sl-bottle .sl-video {
+    width: min(440px, 100%); max-height: 86vh; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+    -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 48%, #000 52%, rgba(0,0,0,.6) 70%, transparent 100%);
+            mask-image: radial-gradient(ellipse 50% 50% at 50% 48%, #000 52%, rgba(0,0,0,.6) 70%, transparent 100%);
+  }
+}
 .sl-bottle svg {
   width: min(360px, 100%); height: auto; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55));
   transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .4s ease;
