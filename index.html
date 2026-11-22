@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Noir Essence</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Noir Essence: perfumes de larga duración con envío a todo Ecuador y pago contra entrega. Pide por WhatsApp.">
+<meta name="description" content="Noir Essence: perfumes árabes originales con envío a todo Ecuador. Contra entrega en Guayaquil. Pide por WhatsApp.">
 <meta name="theme-color" content="#0f0c10">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Noir Essence · Perfumes en Ecuador">
-<meta property="og:description" content="Fragancias de larga duración. Pide por WhatsApp y paga al recibir, con envío a todo Ecuador.">
+<meta property="og:description" content="Perfumes árabes originales y sellados. Pide por WhatsApp, con envío a todo Ecuador.">
 <meta property="og:locale" content="es_EC">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f0c10'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='40' fill='%23d2a35c'%3EN%3C/text%3E%3C/svg%3E">
@@ -160,6 +160,14 @@ nav.links a:hover { color: var(--paper); }
 .sl-price small { font-family: var(--body); font-size: 13px; color: rgba(241,235,228,.6); margin-left: 6px; }
 .sl-meta { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: rgba(241,235,228,.6); }
 .sl-bottle { display: grid; place-items: center; min-width: 0; }
+.sl-bottle .sl-video {
+  display: block; width: min(330px, 100%); aspect-ratio: 9 / 16; height: auto; object-fit: cover;
+  border-radius: 22px; border: 1px solid rgba(241,235,228,.14); background: #0b080a;
+  box-shadow: 0 40px 70px -20px rgba(0,0,0,.75), 0 0 60px -20px var(--c1, rgba(210,163,92,.4));
+  transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .4s ease;
+}
+.sl-bottle.out .sl-video { transform: translateY(40px) rotate(-4deg) scale(.9); opacity: 0; }
+.sl-bottle.in-from-right .sl-video { transform: translateX(60px) rotate(4deg) scale(.92); opacity: 0; transition: none; }
 .sl-bottle svg {
   width: min(360px, 100%); height: auto; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55));
   transition: transform .55s cubic-bezier(.2,.7,.2,1), opacity .4s ease;
@@ -178,6 +186,7 @@ nav.links a:hover { color: var(--paper); }
 .sl-thumb:hover { transform: translateY(-2px); border-color: rgba(210,163,92,.6); }
 .sl-thumb[aria-current="true"] { border-color: var(--amber); background: rgba(210,163,92,.14); }
 .sl-thumb svg { height: 64px; width: auto; }
+.sl-thumb img { width: 100%; aspect-ratio: 4 / 5; height: auto; object-fit: cover; border-radius: 8px; display: block; }
 .sl-thumb span { font-size: 11px; line-height: 1.2; text-align: center; color: rgba(241,235,228,.75); }
 .sl-nav { display: flex; align-items: center; gap: 14px; margin-top: 6px; }
 .sl-arrow {
@@ -188,13 +197,14 @@ nav.links a:hover { color: var(--paper); }
 .sl-count { font-variant-numeric: tabular-nums; font-size: 14px; letter-spacing: .1em; color: rgba(241,235,228,.7); }
 .sl-count b { color: var(--paper); font-weight: 400; }
 .sl-bar { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--amber); width: 0; z-index: 3; }
-.sl-bar.run { animation: bar 6s linear forwards; }
+.sl-bar.run { animation: bar 8s linear forwards; }
 @keyframes bar { to { width: 100%; } }
 @media (max-width: 900px) {
   .slider { min-height: 0; padding-block: 24px 36px; }
   .sl-grid { grid-template-columns: 1fr; gap: 18px; }
   .sl-bottle { order: -1; }
   .sl-bottle svg { width: min(230px, 62vw); }
+  .sl-bottle .sl-video { width: min(250px, 64vw); }
   .sl-word { place-items: start center; padding-top: 70px; font-size: clamp(90px, 30vw, 200px); }
   .sl-thumbs { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 92px; overflow-x: auto; padding-bottom: 4px; }
 }
@@ -349,6 +359,7 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
 .card:hover { border-color: color-mix(in srgb, var(--amber) 50%, var(--ink-3)); }
 .card .art { aspect-ratio: 4 / 3.4; max-width: 100%; display: grid; place-items: center; background: radial-gradient(circle at 50% 70%, var(--ink-3), var(--ink-2) 70%); }
 .card .art svg { height: 82%; width: auto; }
+.card .art img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .card .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .card .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
 .card h3 { font-size: 28px; }
@@ -382,6 +393,9 @@ section.block { padding-block: clamp(56px, 8vw, 104px); }
 #catalogo .card:hover::after { opacity: 1; }
 #catalogo .card .art { transform-style: preserve-3d; }
 #catalogo .card .art svg { transform: translateZ(36px); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+#catalogo .card .art { overflow: hidden; }
+#catalogo .card .art img { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+#catalogo .card:hover .art img { transform: scale(1.05); }
 #catalogo .card:hover .art svg { transform: translateZ(60px) scale(1.04); }
 #catalogo .card.dissolve { opacity: 0; filter: blur(6px); transform: scale(.94); }
 #catalogo .card.enter { opacity: 0; filter: blur(8px); transform: scale(.96) translateY(10px); }
@@ -656,23 +670,23 @@ footer .social a:hover { color: var(--paper); }
     <div class="sl-ing" id="sl-ing" aria-hidden="true"></div>
     <div class="wrap sl-grid">
       <div class="sl-text" id="sl-text" aria-live="polite">
-        <p class="eyebrow" id="sl-cat">Para él · Eau de Parfum</p>
-        <h1 id="sl-title">Noir Nº 1</h1>
-        <p class="sl-desc" id="sl-desc">Ámbar, cuero y pimienta negra. Intenso y elegante, para la noche.</p>
-        <span class="sl-meta" id="sl-meta">100 ml · dura 8–10 h</span>
+        <p class="eyebrow" id="sl-cat">Unisex · Eau de Parfum</p>
+        <h1 id="sl-title">Khamrah</h1>
+        <p class="sl-desc" id="sl-desc">Dátiles, canela, praliné y vainilla. Dulce y especiado, el favorito de la noche.</p>
+        <span class="sl-meta" id="sl-meta">100 ml · Lattafa · original sellado</span>
         <div class="sl-buy">
-          <span class="sl-price" id="sl-price">$39</span>
+          <span class="sl-price" id="sl-price">$60</span>
           <a class="btn btn-wa" id="sl-cta" href="#" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>Pedir ahora</a>
         </div>
       </div>
       <div class="sl-bottle" id="sl-bottle"></div>
       <div class="sl-side">
         <p class="sl-side-t">Más aromas</p>
-        <p class="sl-side-s">Pago contra entrega en todo Ecuador</p>
+        <p class="sl-side-s">Originales · Envío a todo Ecuador</p>
         <div class="sl-thumbs" id="sl-thumbs" role="group" aria-label="Elegir perfume"></div>
         <div class="sl-nav">
           <button class="sl-arrow" id="sl-prev" aria-label="Perfume anterior">&#8592;</button>
-          <span class="sl-count" id="sl-count"><b>01</b> / 06</span>
+          <span class="sl-count" id="sl-count"><b>01</b> / 05</span>
           <button class="sl-arrow" id="sl-next" aria-label="Perfume siguiente">&#8594;</button>
         </div>
       </div>
@@ -684,9 +698,9 @@ footer .social a:hover { color: var(--paper); }
     <div class="rt-sticky">
       <div class="wrap rt-grid">
         <div class="rt-head">
-          <p class="rt-kick">Eau de Parfum · Hecho para durar</p>
+          <p class="rt-kick">Perfumería árabe · Hecha para durar</p>
           <h2 class="rt-title" id="rt-title"><span>Deja</span><span>tu</span><span>huella</span></h2>
-          <p class="rt-sub">Una sola aplicación en el cuello y las muñecas. Salida fresca, corazón floral y un fondo de ámbar que se queda contigo hasta 10 horas.</p>
+          <p class="rt-sub">Una sola aplicación en el cuello y las muñecas. Salida fresca, corazón intenso y un fondo de ámbar y vainilla que se queda contigo durante horas.</p>
         </div>
         <div class="rt-stage" id="rt-stage" aria-hidden="true">
           <canvas id="rt-canvas"></canvas>
@@ -713,25 +727,25 @@ footer .social a:hover { color: var(--paper); }
         </div>
         <div class="rt-side">
           <a class="rt-pill" data-wa="Hola Noir Essence, quiero pedir mi perfume" href="#" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>Pedir el mío</a>
-          <span class="rt-vert">100 ml · 8–10 h en piel</span>
+          <span class="rt-vert">100 ml · originales sellados</span>
         </div>
       </div>
       <div class="rt-dots" aria-hidden="true"><i></i><i></i><i></i></div>
     </div>
   </section>
 
-  <div class="marquee" id="marquee" aria-label="Pago contra entrega · Envío a todo Ecuador en 24 a 72 horas · Dura 8 a 10 horas en piel · Asesoría personal">
+  <div class="marquee" id="marquee" aria-label="100% originales y sellados · Envío a todo Ecuador · Contra entrega en Guayaquil · Asesoría personal">
     <div class="mq-track" id="mq-track" aria-hidden="true">
       <div class="mq-group">
-        <span>Pago contra entrega</span><i>✦</i>
-        <span>Envío a todo Ecuador <em>24–72 h</em></span><i>✦</i>
-        <span>Dura <em>8–10 h</em> en piel</span><i>✦</i>
+        <span><em>100%</em> originales y sellados</span><i>✦</i>
+        <span>Envío a todo Ecuador</span><i>✦</i>
+        <span>Contra entrega en <em>Guayaquil</em></span><i>✦</i>
         <span>Asesoría personal</span><i>✦</i>
       </div>
       <div class="mq-group">
-        <span>Pago contra entrega</span><i>✦</i>
-        <span>Envío a todo Ecuador <em>24–72 h</em></span><i>✦</i>
-        <span>Dura <em>8–10 h</em> en piel</span><i>✦</i>
+        <span><em>100%</em> originales y sellados</span><i>✦</i>
+        <span>Envío a todo Ecuador</span><i>✦</i>
+        <span>Contra entrega en <em>Guayaquil</em></span><i>✦</i>
         <span>Asesoría personal</span><i>✦</i>
       </div>
     </div>
@@ -743,7 +757,7 @@ footer .social a:hover { color: var(--paper); }
       <div class="head">
         <p class="eyebrow">Catálogo</p>
         <h2>Elige tu firma</h2>
-        <p>Toca "Pedir" y te escribimos por WhatsApp con disponibilidad y tiempo de entrega para tu ciudad.</p>
+        <p>Perfumes árabes originales de Lattafa, Afnan y Rasasi. Toca "Pedir" y te confirmamos por WhatsApp la disponibilidad y el envío a tu ciudad.</p>
       </div>
       <div class="filters" role="group" aria-label="Filtrar por categoría">
         <button class="chip" id="f-todos" data-f="todos" aria-pressed="true">Todos</button>
@@ -774,7 +788,6 @@ footer .social a:hover { color: var(--paper); }
         <span>Arrastra, desliza o haz scroll para girar</span>
         <button class="sl-arrow" id="ring-next" aria-label="Girar a la derecha">&#8594;</button>
       </div>
-      <p class="note-demo">Productos y precios de ejemplo. Reemplázalos por el catálogo real de tu proveedor.</p>
     </div>
   </section>
 
@@ -782,7 +795,7 @@ footer .social a:hover { color: var(--paper); }
     <div class="wrap">
       <div class="head">
         <p class="eyebrow">Cómo comprar</p>
-        <h2>Tres pasos, y pagas al final</h2>
+        <h2>Tres pasos y lo recibes en casa</h2>
       </div>
       <div class="howto" id="howto">
         <div class="howto-sticky">
@@ -794,18 +807,18 @@ footer .social a:hover { color: var(--paper); }
             </div>
             <div class="ph-chat" id="ph-chat">
               <div class="ph-day">Hoy</div>
-              <div class="msg me" data-at=".04" data-step="0">Hola 👋 quiero el <b>Velvet Rose</b> de 100 ml</div>
-              <div class="msg them" data-at=".14" data-step="0">¡Hola! Sí, está disponible ✨ Son <b>$42</b>. ¿A qué ciudad lo enviamos?</div>
+              <div class="msg me" data-at=".04" data-step="0">Hola 👋 quiero el <b>Yara</b> de 100 ml</div>
+              <div class="msg them" data-at=".14" data-step="0">¡Hola! Sí, está disponible ✨ Son <b>$48</b>. ¿A qué ciudad lo enviamos?</div>
               <div class="msg me" data-at=".26" data-step="1">A Guayaquil. Me llamo Ana, te paso mi dirección 📍</div>
               <div class="msg them" data-at=".38" data-step="1">¡Listo, Ana! Tu pedido quedó confirmado 🖤</div>
               <div class="msg them ticket" data-at=".48" data-step="1">
                 <span class="tk-t">Pedido confirmado</span>
-                <span class="tk-r"><span>Velvet Rose · 100 ml</span><b>$42</b></span>
+                <span class="tk-r"><span>Yara · 100 ml</span><b>$48</b></span>
                 <span class="tk-r"><span>Pago</span><b>Contra entrega</b></span>
                 <span class="tk-r"><span>Llega en</span><b>24–48 h</b></span>
               </div>
-              <div class="msg them" data-at=".62" data-step="2">🚚 Tu perfume ya va en camino con la transportadora.</div>
-              <div class="msg them" data-at=".76" data-step="2">Cuando llegue, pagas en efectivo o por transferencia. ¡Disfrútalo! ✨</div>
+              <div class="msg them" data-at=".62" data-step="2">🚚 Tu perfume ya va en camino. Te paso la guía para que lo sigas.</div>
+              <div class="msg them" data-at=".76" data-step="2">Cuando llegue, le pagas al motorizado. ¡Disfrútalo! ✨</div>
               <div class="typing" id="ph-typing"><i></i><i></i><i></i></div>
             </div>
             <div class="ph-input"><span>Escribe un mensaje</span><svg><use href="#wa"/></svg></div>
@@ -819,11 +832,11 @@ footer .social a:hover { color: var(--paper); }
             </div>
             <div class="hs" data-s="1">
               <span class="hs-n">02</span>
-              <div><h3>Confirmamos tu pedido</h3><p>Nos das tu nombre, ciudad y dirección. Despachamos con transportadora a todo el país.</p></div>
+              <div><h3>Confirmamos tu pedido</h3><p>Nos das tu nombre, ciudad y dirección. Despachamos a todo el país y te enviamos la guía de seguimiento.</p></div>
             </div>
             <div class="hs" data-s="2">
               <span class="hs-n">03</span>
-              <div><h3>Recibes y pagas</h3><p>Pagas en efectivo cuando el perfume llega a tus manos. También aceptamos transferencia.</p></div>
+              <div><h3>Pagas y recibes</h3><p>En Guayaquil pagas al recibir (solo adelantas el envío del motorizado). En otras ciudades pagas por transferencia y te enviamos la guía.</p></div>
             </div>
             <a class="btn btn-wa" data-wa="Hola Noir Essence, quiero hacer un pedido" href="#" target="_blank" rel="noopener"><svg><use href="#wa"/></svg>Empezar mi pedido</a>
             <p class="howto-note">Conversación de ejemplo.</p>
@@ -884,16 +897,16 @@ footer .social a:hover { color: var(--paper); }
                 <p>Aparece después y define el carácter del perfume.</p>
               </div>
               <div class="fl-step" data-l="0">
-                <span class="fl-time">Hasta 10 h</span>
+                <span class="fl-time">Varias horas</span>
                 <h3>Fondo</h3>
                 <p class="fl-notes">Ámbar · Oud · Vainilla · Almizcle</p>
                 <p>Lo que queda en tu piel y lo que la gente recuerda de ti.</p>
               </div>
             </div>
             <div class="conc">
-              <div><b>EDT</b><span>Eau de Toilette · 4–6 h</span></div>
-              <div><b>EDP</b><span>Eau de Parfum · 8–10 h</span></div>
-              <div><b>Parfum</b><span>Extrait · 10 h o más</span></div>
+              <div><b>EDT</b><span>Eau de Toilette · 3–5 h</span></div>
+              <div><b>EDP</b><span>Eau de Parfum · 6–10 h</span></div>
+              <div><b>Parfum</b><span>Extrait · 8 h o más</span></div>
             </div>
           </div>
         </div>
@@ -906,7 +919,7 @@ footer .social a:hover { color: var(--paper); }
       <aside class="faq-side">
         <p class="eyebrow">Preguntas frecuentes</p>
         <h2>Antes de pedir</h2>
-        <p class="faq-lead">Todo lo que necesitas saber para comprar tranquilo, sin pagar nada por adelantado.</p>
+        <p class="faq-lead">Todo lo que necesitas saber para comprar tranquilo.</p>
         <div class="concierge">
           <span class="cg-av">N</span>
           <div>
@@ -921,24 +934,24 @@ footer .social a:hover { color: var(--paper); }
 
       <div class="acc" id="acc">
         <div class="acc-item open">
-          <button class="acc-q" id="acc-q1" aria-expanded="true" aria-controls="acc-a1"><span class="acc-n">01</span><span class="acc-t">¿Cómo funciona el pago contra entrega?</span><span class="acc-i" aria-hidden="true"></span></button>
-          <div class="acc-a" id="acc-a1" role="region" aria-labelledby="acc-q1"><div><p>Haces tu pedido por WhatsApp, lo enviamos con transportadora y pagas en efectivo al recibirlo. No necesitas tarjeta ni pagar por adelantado.</p></div></div>
+          <button class="acc-q" id="acc-q1" aria-expanded="true" aria-controls="acc-a1"><span class="acc-n">01</span><span class="acc-t">¿Los perfumes son originales?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a1" role="region" aria-labelledby="acc-q1"><div><p>Sí. Todos son originales y sellados, de marcas árabes reconocidas como Lattafa, Afnan y Rasasi. Cada frasco viene en su caja original con su código de lote.</p></div></div>
         </div>
         <div class="acc-item">
-          <button class="acc-q" id="acc-q2" aria-expanded="false" aria-controls="acc-a2"><span class="acc-n">02</span><span class="acc-t">¿A qué ciudades envían y cuánto tarda?</span><span class="acc-i" aria-hidden="true"></span></button>
-          <div class="acc-a" id="acc-a2" role="region" aria-labelledby="acc-q2"><div><p>Enviamos a todo Ecuador. En Quito y Guayaquil suele llegar en 24 a 48 horas; en el resto del país, de 48 a 72 horas según la ruta.</p></div></div>
+          <button class="acc-q" id="acc-q2" aria-expanded="false" aria-controls="acc-a2"><span class="acc-n">02</span><span class="acc-t">¿Cómo pago y a qué ciudades envían?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a2" role="region" aria-labelledby="acc-q2"><div><p>Enviamos a todo Ecuador. En Guayaquil hay pago contra entrega según el sector: solo adelantas el envío del motorizado y pagas el perfume al recibirlo. A otras provincias pagas por transferencia, el envío cuesta $6 y te enviamos la guía para que sigas tu paquete.</p></div></div>
         </div>
         <div class="acc-item">
           <button class="acc-q" id="acc-q3" aria-expanded="false" aria-controls="acc-a3"><span class="acc-n">03</span><span class="acc-t">¿Cuánto dura el aroma en la piel?</span><span class="acc-i" aria-hidden="true"></span></button>
-          <div class="acc-a" id="acc-a3" role="region" aria-labelledby="acc-q3"><div><p>Depende de la concentración y de tu tipo de piel. Un Eau de Parfum dura entre 8 y 10 horas. Aplícalo en cuello y muñecas, sin frotar, para que dure más.</p></div></div>
+          <div class="acc-a" id="acc-a3" role="region" aria-labelledby="acc-q3"><div><p>Depende de la concentración y de tu tipo de piel. Los perfumes árabes son conocidos por durar muchas horas en la piel y en la ropa. Aplícalo en cuello y muñecas, sin frotar, para que dure más.</p></div></div>
         </div>
         <div class="acc-item">
           <button class="acc-q" id="acc-q4" aria-expanded="false" aria-controls="acc-a4"><span class="acc-n">04</span><span class="acc-t">¿Me ayudan a elegir un perfume para regalar?</span><span class="acc-i" aria-hidden="true"></span></button>
           <div class="acc-a" id="acc-a4" role="region" aria-labelledby="acc-q4"><div><p>Sí. Cuéntanos para quién es, su edad y qué estilo tiene, y te recomendamos dos o tres opciones con su precio.</p></div></div>
         </div>
         <div class="acc-item">
-          <button class="acc-q" id="acc-q5" aria-expanded="false" aria-controls="acc-a5"><span class="acc-n">05</span><span class="acc-t">¿Puedo pagar por transferencia?</span><span class="acc-i" aria-hidden="true"></span></button>
-          <div class="acc-a" id="acc-a5" role="region" aria-labelledby="acc-q5"><div><p>Sí. Además del pago contra entrega aceptamos transferencia bancaria y link de pago con tarjeta.</p></div></div>
+          <button class="acc-q" id="acc-q5" aria-expanded="false" aria-controls="acc-a5"><span class="acc-n">05</span><span class="acc-t">¿Cómo sé que mi pedido va en camino?</span><span class="acc-i" aria-hidden="true"></span></button>
+          <div class="acc-a" id="acc-a5" role="region" aria-labelledby="acc-q5"><div><p>Apenas despachamos tu perfume te enviamos por WhatsApp la foto del paquete y el número de guía para que lo sigas hasta tu casa.</p></div></div>
         </div>
       </div>
     </div>
@@ -994,22 +1007,20 @@ footer .social a:hover { color: var(--paper); }
 // Tu número de WhatsApp con código de país, sin + ni espacios. Ej: 593991234567
 const WHATSAPP = "593968107948";
 
-// Catálogo de ejemplo: cambia nombres, notas, precios y categoría (el / ella / unisex).
+// Catálogo real: cambia nombres, notas, precios y categoría (el / ella / unisex).
 // fondo: colores del slider · palabra: texto gigante · ing: ingredientes que flotan
 // (citrico, petalo, vainilla, ambar, madera, grano, hoja) · desc: frase corta del slider
 const PRODUCTOS = [
-  { nombre: "Noir Nº 1", cat: "el", ml: 100, tipo: "EDP", precio: 39, notas: "Ámbar, cuero y pimienta negra", tono: ["#d2a35c", "#6b4a1f"],
-    fondo: ["#4a2c17", "#120a07"], palabra: "Ámbar", ing: ["ambar", "grano", "madera"], desc: "Intenso y elegante, para la noche." },
-  { nombre: "Velvet Rose", cat: "ella", ml: 100, tipo: "EDP", precio: 42, notas: "Rosa, pera y almizcle blanco", tono: ["#e3a3a8", "#7d3a46"],
-    fondo: ["#5a1f2e", "#14070b"], palabra: "Rose", ing: ["petalo", "petalo", "hoja"], desc: "Floral y suave, deja huella sin ser invasivo." },
-  { nombre: "Oud Nocturne", cat: "unisex", ml: 100, tipo: "Parfum", precio: 55, notas: "Oud, azafrán y madera de sándalo", tono: ["#b07a3c", "#3c2312"],
-    fondo: ["#3b2a1a", "#0d0906"], palabra: "Oud", ing: ["madera", "ambar", "madera"], desc: "Profundo y misterioso. El más duradero de la colección." },
-  { nombre: "Blue Coast", cat: "el", ml: 100, tipo: "EDT", precio: 34, notas: "Bergamota, sal marina y vetiver", tono: ["#7fb3c9", "#1f4a5c"],
-    fondo: ["#173a4a", "#050e13"], palabra: "Marine", ing: ["citrico", "hoja", "citrico"], desc: "Fresco y limpio, para el día a día y el calor." },
-  { nombre: "Vanille Noire", cat: "ella", ml: 100, tipo: "EDP", precio: 45, notas: "Vainilla, haba tonka y cacao", tono: ["#d9b38a", "#5a3a22"],
-    fondo: ["#3e2a22", "#0f0a08"], palabra: "Vanille", ing: ["vainilla", "grano", "vainilla"], desc: "Dulce y cálido. Imposible no preguntar qué llevas puesto." },
-  { nombre: "Ámbar Andino", cat: "unisex", ml: 100, tipo: "EDP", precio: 40, notas: "Ámbar, palo santo y cítricos", tono: ["#e0b25c", "#7a5520"],
-    fondo: ["#5a3d14", "#140d05"], palabra: "Andino", ing: ["citrico", "madera", "ambar"], desc: "Cálido con un toque cítrico, inspirado en los Andes." }
+  { nombre: "Khamrah", slug: "khamrah", marca: "Lattafa", cat: "unisex", ml: 100, tipo: "EDP", precio: 60, notas: "Lattafa · Dátiles, canela, praliné y vainilla", tono: ["#e09a4a", "#7a3d12"],
+    fondo: ["#4a2510", "#120804"], palabra: "Khamrah", ing: ["grano", "vainilla", "ambar"], desc: "Dulce y especiado, como un postre árabe. El favorito de la noche." },
+  { nombre: "9PM", slug: "9pm", marca: "Afnan", cat: "el", ml: 100, tipo: "EDP", precio: 55, notas: "Afnan · Manzana, canela, lavanda y vainilla", tono: ["#55556a", "#101016"],
+    fondo: ["#1f1a36", "#07060c"], palabra: "Night", ing: ["citrico", "grano", "vainilla"], desc: "Dulce y atrevido, hecho para salir de noche." },
+  { nombre: "Hawas", slug: "hawas", marca: "Rasasi", cat: "el", ml: 100, tipo: "EDP", precio: 50, notas: "Rasasi · Manzana, bergamota, notas marinas y ámbar", tono: ["#b4c0ea", "#3e4c84"],
+    fondo: ["#17304a", "#050c14"], palabra: "Marine", ing: ["citrico", "hoja", "citrico"], desc: "Fresco y frutal, ideal para el día, el calor y el gym." },
+  { nombre: "Asad", slug: "asad", marca: "Lattafa", cat: "el", ml: 100, tipo: "EDP", precio: 48, notas: "Lattafa · Pimienta negra, tabaco, café y vainilla", tono: ["#d4ac5a", "#2a2216"],
+    fondo: ["#3a2a14", "#0c0905"], palabra: "Asad", ing: ["grano", "madera", "ambar"], desc: "Intenso y especiado. Se nota y dura todo el día." },
+  { nombre: "Yara", slug: "yara", marca: "Lattafa", cat: "ella", ml: 100, tipo: "EDP", precio: 48, notas: "Lattafa · Orquídea, frutas tropicales, vainilla y almizcle", tono: ["#f0b9c4", "#a65a70"],
+    fondo: ["#5a2434", "#14070b"], palabra: "Yara", ing: ["petalo", "vainilla", "petalo"], desc: "Dulce y cremosa. El perfume árabe más pedido por ellas." }
 ];
 // ==========================
 
@@ -1038,7 +1049,7 @@ function render(filtro) {
     .filter(p => filtro === "todos" || p.cat === filtro)
     .map((p, i) => `
       <article class="card">
-        <div class="art">${frasco(p, i)}</div>
+        <div class="art"><img src="media/${p.slug}-foto.jpg" alt="${p.nombre} de ${p.marca}, frasco original" loading="lazy" width="800" height="1000"></div>
         <div class="body">
           <span class="meta">${catNombre[p.cat]} · ${p.tipo} · ${p.ml} ml</span>
           <div class="row"><h3>${p.nombre}</h3><span class="price">$${p.precio}</span></div>
@@ -1304,7 +1315,13 @@ const Cat3D = (function () {
     holo.addColorStop(0, "rgba(255,110,160,.28)"); holo.addColorStop(.5, "rgba(255,180,90,.12)"); holo.addColorStop(1, "rgba(140,110,255,.28)");
     g.fillStyle = holo; g.fillRect(0, 0, 512, 716);
     g.globalCompositeOperation = "source-over";
-    if (img) g.drawImage(img, 146, 70, 220, 319);
+    if (img) {
+      const bw = 300, bh = 375, bx = (512 - bw) / 2, by = 62, s = Math.max(bw / img.naturalWidth, bh / img.naturalHeight);
+      const sw = bw / s, sh = bh / s;
+      g.save(); roundRect(g, bx, by, bw, bh, 18); g.clip();
+      g.drawImage(img, (img.naturalWidth - sw) / 2, (img.naturalHeight - sh) / 2, sw, sh, bx, by, bw, bh);
+      g.restore();
+    }
     g.fillStyle = "rgba(241,235,228,.65)"; g.font = "18px 'Tenor Sans', sans-serif";
     g.fillText(`${catNombre[p.cat].toUpperCase()} · ${p.tipo} · ${p.ml} ML`, 36, 48);
     g.fillStyle = "#f1ebe4"; g.font = "64px Italiana, Georgia, serif";
@@ -1314,7 +1331,7 @@ const Cat3D = (function () {
     g.fillStyle = "#d2a35c"; g.font = "48px Italiana, Georgia, serif";
     g.fillText("$" + p.precio, 36, 640);
     g.fillStyle = "rgba(241,235,228,.55)"; g.font = "18px 'Tenor Sans', sans-serif";
-    g.fillText("Pagas al recibir", 150, 636);
+    g.fillText("Envío a todo Ecuador", 150, 636);
     g.restore();
     g.strokeStyle = "rgba(241,235,228,.28)"; g.lineWidth = 2; roundRect(g, 1, 1, 510, 714, 30); g.stroke();
     return c;
@@ -1330,7 +1347,7 @@ const Cat3D = (function () {
     const m = new THREE.Mesh(cardGeo, mat); m.userData.p = p;
     const img = new Image();
     img.onload = () => { tex.image = drawCard(p, img); tex.needsUpdate = true; };
-    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(bottleSVG(p));
+    img.src = "media/" + p.slug + "-foto.jpg";
     if (document.fonts) document.fonts.ready.then(() => { if (img.complete) { tex.image = drawCard(p, img); tex.needsUpdate = true; } });
     return m;
   }
@@ -1579,7 +1596,7 @@ const Ring = (function () {
   const word = $("sl-word"), ingBox = $("sl-ing"), text = $("sl-text"), bottle = $("sl-bottle");
   const thumbs = $("sl-thumbs"), bar = $("sl-bar");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const DUR = 6000;
+  const DUR = 8000;
   let idx = 0, timer = null, paused = false, busy = false;
 
   // Ingredientes dibujados en SVG (viewBox 0 0 100 100)
@@ -1596,21 +1613,7 @@ const Ring = (function () {
   const SLOTS = [[6,14,74,-20],[22,74,48,30],[40,6,40,10],[58,80,60,-35],[74,10,44,25],[90,58,70,-10],[48,52,30,40]];
 
   function bigBottle(p) {
-    const [c1, c2] = p.tono;
-    return `<svg viewBox="0 0 200 290" role="img" aria-label="Frasco de ${p.nombre}">
-      <defs>
-        <linearGradient id="bg-glass" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#3a2b32"/><stop offset=".55" stop-color="#1a1318"/><stop offset="1" stop-color="#0b080a"/></linearGradient>
-        <linearGradient id="bg-liq" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>
-        <linearGradient id="bg-cap" x1="0" x2="1"><stop offset="0" stop-color="#6e5126"/><stop offset=".5" stop-color="#e6c07c"/><stop offset="1" stop-color="#6e5126"/></linearGradient>
-      </defs>
-      <rect x="76" y="10" width="48" height="50" rx="4" fill="url(#bg-cap)"/>
-      <rect x="86" y="60" width="28" height="16" fill="#2a2025"/>
-      <rect x="24" y="76" width="152" height="200" rx="24" fill="url(#bg-glass)" stroke="rgba(241,235,228,.25)" stroke-width="1.5"/>
-      <rect x="34" y="146" width="132" height="120" rx="15" fill="url(#bg-liq)" opacity=".9"/>
-      <rect x="40" y="90" width="10" height="160" rx="5" fill="#fff" opacity=".08"/>
-      <text x="100" y="118" text-anchor="middle" fill="#f1ebe4" font-family="Italiana, Georgia, serif" font-size="13" letter-spacing="3">NOIR ESSENCE</text>
-      <text x="100" y="136" text-anchor="middle" fill="#f1ebe4" font-family="Italiana, Georgia, serif" font-size="12" opacity=".85">${p.nombre}</text>
-    </svg>`;
+    return `<video class="sl-video" src="media/${p.slug}.mp4" poster="media/${p.slug}-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Video de ${p.nombre} de ${p.marca}"></video>`;
   }
 
   function placeIngredients(p) {
@@ -1627,8 +1630,8 @@ const Ring = (function () {
     $("sl-cat").textContent = `${catNombre[p.cat]} · ${({EDP: "Eau de Parfum", EDT: "Eau de Toilette", Parfum: "Parfum"})[p.tipo] || p.tipo}`;
     $("sl-title").innerHTML = p.nombre.replace(/(\S+)$/, "<em>$1</em>");
     $("sl-desc").textContent = `${p.notas}. ${p.desc}`;
-    $("sl-meta").textContent = `${p.ml} ml · ${p.tipo === "EDT" ? "dura 4–6 h" : p.tipo === "Parfum" ? "dura 10 h o más" : "dura 8–10 h"}`;
-    $("sl-price").innerHTML = `$${p.precio}<small>pagas al recibir</small>`;
+    $("sl-meta").textContent = `${p.ml} ml · ${p.marca || "Original"} · original sellado`;
+    $("sl-price").innerHTML = `$${p.precio}<small>envío a todo Ecuador</small>`;
     $("sl-cta").href = waLink(`Hola Noir Essence, quiero pedir ${p.nombre} (${p.ml} ml) de $${p.precio}. ¿Está disponible?`);
     $("sl-count").innerHTML = `<b>${String(idx + 1).padStart(2, "0")}</b> / ${String(PRODUCTOS.length).padStart(2, "0")}`;
     word.querySelector("span").textContent = p.palabra;
@@ -1672,7 +1675,7 @@ const Ring = (function () {
   }
 
   thumbs.innerHTML = PRODUCTOS.map((p, i) =>
-    `<button class="sl-thumb" id="sl-t${i}" aria-label="Ver ${p.nombre}" aria-current="${i === 0}">${frasco(p, "t" + i)}<span>${p.nombre}</span></button>`).join("");
+    `<button class="sl-thumb" id="sl-t${i}" aria-label="Ver ${p.nombre}" aria-current="${i === 0}"><img src="media/${p.slug}-thumb.jpg" alt="" width="240" height="300"><span>${p.nombre}</span></button>`).join("");
   thumbs.querySelectorAll(".sl-thumb").forEach((b, i) => b.addEventListener("click", () => { go(i); schedule(); }));
   $("sl-prev").addEventListener("click", () => { go(idx - 1); schedule(); });
   $("sl-next").addEventListener("click", () => { go(idx + 1); schedule(); });
